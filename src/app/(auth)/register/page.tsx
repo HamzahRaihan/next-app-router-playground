@@ -1,5 +1,10 @@
 import React from 'react';
+import RegisterCard from './components/card';
 
 export default function RegisterPage() {
-  return <div>RegisterPage</div>;
+  return (
+    <div>
+      <RegisterCard />
+    </div>
+  );
 }
