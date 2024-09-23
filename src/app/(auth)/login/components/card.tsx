@@ -1,13 +1,25 @@
+'use client';
+
 import Link from 'next/link';
 import React from 'react';
 
 export default function LoginCard() {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        email: (e.currentTarget as HTMLFormElement).email.value,
+        password: (e.currentTarget as HTMLFormElement).password.value,
+      }),
+    });
+  };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
       <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
         <h1 className="font-bold text-center text-2xl mb-5">Login</h1>
         <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
-          <form className="px-5 py-7">
+          <form className="px-5 py-7" onSubmit={(e) => handleSubmit(e)}>
             <label htmlFor="email" className="font-semibold text-sm text-gray-600 pb-1 block">
               E-mail
             </label>
