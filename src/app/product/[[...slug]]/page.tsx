@@ -8,7 +8,13 @@ type Params = {
 
 async function getData() {
   // const res = await fetch('https://fakestoreapi.com/products');
-  const res = await fetch('http://localhost:3000/api/products');
+  const res = await fetch('http://localhost:3000/api/products', {
+    cache: 'force-cache',
+    next: {
+      tags: ['products'],
+      // revalidate: 30,
+    },
+  });
   if (!res.ok) throw new Error('Failed to fetch data');
   return res.json();
 }
@@ -16,6 +22,7 @@ async function getData() {
 export default async function ProductPage({ params }: Readonly<Params>) {
   const { slug } = params;
   const products = await getData();
+  console.log('🚀 ~ ProductPage ~ products:', products);
   return (
     <div>
       <h1>{slug ? 'Detail Product Page' : 'Product Page'}</h1>
