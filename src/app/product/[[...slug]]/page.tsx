@@ -1,15 +1,18 @@
-import React from 'react';
-import ProductCard from '../components/card';
+import React, { Suspense } from 'react';
+import { ProductCard } from '../components/card';
 import { ProductProps } from '@/app/types/product';
+import Loading from './loading';
 
 type Params = {
   params: { slug: string[] };
 };
 
 async function getData() {
-  // const res = await fetch('https://fakestoreapi.com/products');
+  // const res = await fetch('https://fakestoreapi.com/products', {
+  //   cache: 'no-store',
+  // });
   const res = await fetch('http://localhost:3000/api/products', {
-    cache: 'force-cache',
+    cache: 'no-store',
     next: {
       tags: ['products'],
       // revalidate: 30,
@@ -33,10 +36,12 @@ export default async function ProductPage({ params }: Readonly<Params>) {
           {slug?.[2] && <div>id: {slug[2]}</div>}
         </>
       )}
-      <div className="grid grid-cols-4 gap-2 place-items-center">
-        {products.products.map((product: ProductProps) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 place-items-center">
+        <Suspense fallback={<Loading />}>
+          {products.products.map((product: ProductProps) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </Suspense>
       </div>
     </div>
   );
