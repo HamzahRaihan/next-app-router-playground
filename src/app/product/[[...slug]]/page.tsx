@@ -12,7 +12,7 @@ async function getData() {
   //   cache: 'no-store',
   // });
   const res = await fetch('http://localhost:3000/api/products', {
-    cache: 'no-store',
+    cache: 'force-cache',
     next: {
       tags: ['products'],
       // revalidate: 30,
