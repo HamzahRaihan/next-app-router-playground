@@ -20,9 +20,9 @@ export default function AdminProductPage() {
   };
 
   return (
-    <div>
+    <div className="h-96 w-full bg-zinc-400 rounded-lg p-2 my-2 flex items-center justify-center">
       <h1>{status}</h1>
-      <button className="border-2 rounded-lg p-2 border-black bg-zinc-500 text-white" onClick={() => revalidate()}>
+      <button className="border-2 rounded-lg p-2 border-black bg-black text-white" onClick={() => revalidate()}>
         Revalidate
       </button>
     </div>
