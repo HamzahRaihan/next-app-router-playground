@@ -1,14 +1,16 @@
+import { ReactNode } from 'react';
+
 export default async function ProductLayout({
   children,
   modal,
 }: Readonly<{
-  children: React.ReactNode;
-  modal: React.ReactNode;
+  children: ReactNode;
+  modal: ReactNode;
 }>) {
   return (
-    <main>
+    <>
       {children}
       {modal}
-    </main>
+    </>
   );
 }
