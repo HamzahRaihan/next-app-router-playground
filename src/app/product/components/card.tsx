@@ -12,10 +12,10 @@ export function ProductCard({ product }: Readonly<{ product: ProductProps }>) {
 
       <div className="px-5 pb-5 mt-auto">
         <Link href="#">
-          <h5 className="text-md font-semibold tracking-tight text-gray-900 dark:text-white truncate">{product.title}</h5>
+          <h5 className="text-md font-semibold tracking-tight text-gray-900 dark:text-white truncate">{product.product_name}</h5>
         </Link>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
           <span className="text-3xl font-bold text-gray-900 dark:text-white">${product.price}</span>
           <Link
             href="#"

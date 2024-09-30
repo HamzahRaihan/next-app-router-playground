@@ -1,6 +1,6 @@
 export type ProductProps = {
   id: number;
-  title: string;
+  product_name: string;
   price: number;
   description: string;
   category: string;
