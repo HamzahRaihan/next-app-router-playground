@@ -1,5 +1,5 @@
 import React from 'react';
-import SkeletonCard from '../components/card';
+import SkeletonCard from './components/card';
 
 export default function Loading() {
   const skeletonCount = 8; // Number of SkeletonCard components to render
