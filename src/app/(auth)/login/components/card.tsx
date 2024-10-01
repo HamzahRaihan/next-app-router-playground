@@ -7,6 +7,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { LoginFormSchema } from '@/app/lib/definitions';
 import { ErrorMessage } from '@hookform/error-message';
+import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function LoginCard() {
   const {
@@ -21,14 +23,25 @@ export default function LoginCard() {
     },
   });
 
+  const { push } = useRouter();
+  const searchParams = useSearchParams();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const callbackUrl: any = searchParams.get('callbackUrl');
+
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        email: values.email,
-        password: values.password,
-      }),
+    const res = await signIn('credentials', {
+      redirect: false,
+      email: values.email,
+      password: values.password,
+      callbackUrl,
     });
+
+    if (res?.ok) {
+      push(callbackUrl);
+    }
+    if (!res?.ok) {
+      alert('Error');
+    }
   }
 
   return (
