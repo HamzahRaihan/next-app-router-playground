@@ -1,14 +1,32 @@
+import { withAuth } from 'next-auth/middleware';
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
 
-export default function middleware(req: NextRequest) {
-  const isLogin = true;
-  if (!isLogin) {
-    return NextResponse.redirect(new URL('/login', req.url));
+const corsHeaders = {
+  'Access-Control-Allow-Origin': process.env.NEXT_PUBLIC_BASE_URL ?? '',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+};
+
+export default withAuth(
+  function middleware(req) {
+    const { nextUrl, nextauth } = req;
+    const { pathname } = nextUrl;
+    const { token } = nextauth;
+    console.log('🚀 ~ middleware ~ token:', token);
+
+    if (token && pathname == '/login') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
+
+    return NextResponse.next({ headers: corsHeaders });
+  },
+  {
+    callbacks: {
+      authorized: ({ token, req }) => !!token || req.nextUrl.pathname.startsWith('/login'),
+    },
   }
-  return NextResponse.next();
-}
+);
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/about/:path*'],
+  matcher: ['/dashboard', '/login'],
 };

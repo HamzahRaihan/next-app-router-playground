@@ -8,11 +8,11 @@ export default function LoginPage() {
   const { status } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (status === 'authenticated') {
-      router.back();
-    }
-  }, [status, router]);
+  // useEffect(() => {
+  //   if (status === 'authenticated') {
+  //     router.back();
+  //   }
+  // }, [status, router]);
 
   return (
     <div>
