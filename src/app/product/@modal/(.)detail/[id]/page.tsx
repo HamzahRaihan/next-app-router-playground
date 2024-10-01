@@ -11,7 +11,7 @@ export default async function DetailProduct({ params }: Readonly<{ params: { id:
     <Modal>
       <Image className="object-cover" src={products.image} alt="product-image" width={300} height={300} priority />
       <div className="flex flex-col justify-start items-start">
-        <h1 className="text-xl font-bold">{products.title}</h1>
+        <h1 className="text-xl font-bold">{products.product_name}</h1>
         <h1 className="text-md">Price: ${products.price}</h1>
       </div>
     </Modal>
