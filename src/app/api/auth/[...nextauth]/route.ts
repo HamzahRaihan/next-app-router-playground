@@ -1,3 +1,5 @@
+import { signIn } from '@/app/lib/firebase/service';
+import { compare } from 'bcrypt';
 import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -22,8 +24,9 @@ export const authOptions: NextAuthOptions = {
           password: string;
           role: string;
         };
-        const user = { id: '1', name: 'Hamzah raihan', email: 'jsmith@example.com', password: 'hamzahraihan', role: 'admin' };
-        if (email == user.email && password == user.password) {
+        const user: any = await signIn({ email });
+        const passwordCompare = await compare(password, user?.password);
+        if (passwordCompare) {
           return user;
         }
         return null;
@@ -35,7 +38,7 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, account, user }: any): Promise<any> {
       if (account?.provider === 'credentials') {
         token.email = user.email;
-        token.name = user.name;
+        token.fullname = user.fullname;
         token.role = user.role;
       }
       return token;
@@ -45,8 +48,8 @@ export const authOptions: NextAuthOptions = {
       if ('email' in token && session.user) {
         session.user.email = token.email;
       }
-      if ('name' in token && session.user) {
-        session.user.name = token.name;
+      if ('fullname' in token && session.user) {
+        session.user.fullname = token.fullname;
       }
       if ('role' in token && session.user) {
         session.user.role = token.role;

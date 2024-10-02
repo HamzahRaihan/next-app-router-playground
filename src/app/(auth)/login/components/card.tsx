@@ -26,7 +26,7 @@ export default function LoginCard() {
   const { push } = useRouter();
   const searchParams = useSearchParams();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const callbackUrl: any = searchParams.get('callbackUrl') || '/';
+  const callbackUrl: any = searchParams.get('callbackUrl') ?? '/';
 
   async function onSubmit(values: z.infer<typeof LoginFormSchema>) {
     const res = await signIn('credentials', {

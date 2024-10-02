@@ -1,10 +1,9 @@
-'use client';
-
 import Link from 'next/link';
 
 import React from 'react';
 import NavButton from './button-nav';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import { Session } from '../types/session';
 
 const pathRoute = [
   { path: '/product', name: 'Product' },
@@ -13,7 +12,7 @@ const pathRoute = [
 ];
 
 export default function Navbar() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession() as Session;
   return (
     <div className="flex justify-between bg-zinc-300 py-2 items-center px-4">
       <Link href="/" className="cursor-pointer">
@@ -23,10 +22,10 @@ export default function Navbar() {
         {pathRoute.map((item) => (
           <NavButton key={item.name} path={item.path} name={item.name} />
         ))}
-        {status == 'authenticated' ? (
+        {session ? (
           <>
             <div className="bg-white rounded-lg p-1 text-black">
-              <h1>{session?.user?.name}</h1>
+              <h1>{session?.user?.fullname}</h1>
             </div>
             <button className="bg-white rounded-xl px-3 py-1" onClick={() => signOut()}>
               Logout

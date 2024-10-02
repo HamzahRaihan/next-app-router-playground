@@ -17,6 +17,9 @@ export default withAuth(
     if (token && pathname == '/login') {
       return NextResponse.redirect(new URL('/', req.url));
     }
+    if (token?.role !== 'admin' && pathname == '/dashboard') {
+      return NextResponse.redirect(new URL('/', req.url));
+    }
 
     return NextResponse.next({ headers: corsHeaders });
   },
