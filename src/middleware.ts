@@ -7,6 +7,8 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
+const authPage = ['/login', '/register'];
+
 export default withAuth(
   function middleware(req) {
     const { nextUrl, nextauth } = req;
@@ -14,7 +16,7 @@ export default withAuth(
     const { token } = nextauth;
     console.log('🚀 ~ middleware ~ token:', token);
 
-    if (token && pathname == '/login') {
+    if (token && authPage.includes(pathname)) {
       return NextResponse.redirect(new URL('/', req.url));
     }
     if (token?.role !== 'admin' && pathname == '/dashboard') {
@@ -25,11 +27,14 @@ export default withAuth(
   },
   {
     callbacks: {
-      authorized: ({ token, req }) => !!token || req.nextUrl.pathname.startsWith('/login'),
+      authorized: ({ token, req }) => {
+        const pathname = req.nextUrl.pathname;
+        return !!token || authPage.includes(pathname);
+      },
     },
   }
 );
 
 export const config = {
-  matcher: ['/dashboard', '/login'],
+  matcher: ['/dashboard', '/login', '/register'],
 };
