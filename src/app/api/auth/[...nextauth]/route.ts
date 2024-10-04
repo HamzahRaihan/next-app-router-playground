@@ -1,8 +1,10 @@
+import { signInWithGoogle } from './../../../lib/firebase/service';
 import { signIn } from '@/app/lib/firebase/service';
 import { compare } from 'bcrypt';
 import NextAuth from 'next-auth';
 import type { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -24,6 +26,7 @@ export const authOptions: NextAuthOptions = {
           password: string;
           role: string;
         };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const user: any = await signIn({ email });
         const passwordCompare = await compare(password, user?.password);
         if (passwordCompare) {
@@ -31,6 +34,10 @@ export const authOptions: NextAuthOptions = {
         }
         return null;
       },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_ID ?? '',
+      clientSecret: process.env.GOOGLE_SECRET ?? '',
     }),
   ],
   callbacks: {
@@ -41,6 +48,23 @@ export const authOptions: NextAuthOptions = {
         token.fullname = user.fullname;
         token.role = user.role;
       }
+      if (account?.provider === 'google') {
+        const data: { fullname: string; email: string; image: string; type: string; role: string } = {
+          fullname: user.name,
+          email: user.email,
+          image: user.image,
+          role: 'customer',
+          type: 'google',
+        };
+        const res = await signInWithGoogle(data);
+        if (res.status) {
+          token.fullname = res.data.fullname;
+          token.email = res.data.email;
+          token.type = res.data.type;
+          token.image = res.data.image;
+          token.role = res.data.role;
+        }
+      }
       return token;
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,6 +74,9 @@ export const authOptions: NextAuthOptions = {
       }
       if ('fullname' in token && session.user) {
         session.user.fullname = token.fullname;
+      }
+      if ('image' in token && session.user) {
+        session.user.image = token.image;
       }
       if ('role' in token && session.user) {
         session.user.role = token.role;

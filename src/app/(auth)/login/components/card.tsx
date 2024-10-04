@@ -90,6 +90,17 @@ export default function LoginCard() {
                   </svg>
                   <span className="inline-block ml-1">Create new account</span>
                 </Link>
+                <p>Or</p>
+                <button
+                  onClick={() =>
+                    signIn('google', {
+                      callbackUrl,
+                      redirect: false,
+                    })
+                  }
+                >
+                  Sign in with Google
+                </button>
               </div>
             </div>
           </div>

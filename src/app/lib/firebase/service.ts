@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
 import app from './init';
 import bcrypt from 'bcrypt';
 
@@ -51,4 +51,32 @@ export const register = async (userData: { fullname: string; email: string; pass
     .catch((error) => {
       return { status: false, message: error.message, statusCode: 400 };
     });
+};
+
+export const signInWithGoogle = async (userData: { fullname: string; email: string; image: string; type: string; role: string }) => {
+  const findUser = query(collection(firestore, 'users'), where('email', '==', userData.email));
+  const snapshot = await getDocs(findUser);
+
+  const users = snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
+
+  if (users.length > 0) {
+    return await updateDoc(doc(firestore, 'users', users[0].id), userData)
+      .then(() => {
+        return { status: true, message: 'Sign in with google', statusCode: 200, data: userData };
+      })
+      .catch((error) => {
+        return { status: false, message: error.message, statusCode: 400, data: userData };
+      });
+  } else {
+    return await addDoc(collection(firestore, 'users'), userData)
+      .then(() => {
+        return { status: true, message: 'Account successfully registered', statusCode: 200, data: userData };
+      })
+      .catch((error) => {
+        return { status: false, message: error.message, statusCode: 400, data: userData };
+      });
+  }
 };
