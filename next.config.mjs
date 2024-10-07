@@ -6,11 +6,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'fakestoreapi.com',
         port: '',
+        pathname: '/**',
       },
       {
         protocol: 'https',
         hostname: 'static.nike.com',
         port: '',
+        pathname: '/**',
       },
     ],
   },

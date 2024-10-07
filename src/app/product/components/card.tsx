@@ -7,7 +7,7 @@ export function ProductCard({ product }: Readonly<{ product: ProductProps }>) {
   return (
     <div className="flex flex-col w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <Link href={`/product/detail/${product.id}`}>
-        <Image className="p-8 rounded-t-lg object-cover h-96" src={product.image} alt="product image" width={500} height={500} priority />
+        <Image className="p-8 rounded-t-lg object-cover h-96" src={product.image} loading="lazy" alt="product image" width={500} height={500} />
       </Link>
 
       <div className="px-5 pb-5 mt-auto">
