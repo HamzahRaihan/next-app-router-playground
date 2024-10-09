@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import React, { Suspense } from 'react';
 
-const Modal = dynamic(() => import('@/components/core/Modal/index'), { ssr: true });
+const Modal = dynamic(() => import('@/components/core/Modal/index'), { ssr: false });
 
 export default async function DetailProduct({ params }: Readonly<{ params: { id: number } }>) {
   const { products }: { products: ProductProps } = await getData(`http://localhost:3000/api/products?id=${params.id}`);
